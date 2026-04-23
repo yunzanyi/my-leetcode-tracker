@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>📈 刷题仪表盘</h2>
+{% if pie_json %}
+<div class="row">
+    <div class="col-lg-6">
+        <div id="pieChart" style="height:400px;"></div>
+    </div>
+    <div class="col-lg-6">
+        <div id="barChart" style="height:400px;"></div>
+    </div>
+</div>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script>
+    const pieData = JSON.parse({{ pie_json | safe }});
+    const barData = JSON.parse({{ bar_json | safe }});
+    Plotly.newPlot('pieChart', pieData.data, pieData.layout);
+    Plotly.newPlot('barChart', barData.data, barData.layout);
+</script>
+{% else %}
+<p class="text-muted">还没有数据，赶紧去添加题目吧！</p >
+{% endif %}
+{% endblock %}

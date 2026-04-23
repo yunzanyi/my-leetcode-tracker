@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>📋 已刷题目列表（共 {{ total }} 题）</h2>
+<p class="text-muted">Easy: {{ easy }} | Medium: {{ medium }} | Hard: {{ hard }}</p >
+
+<table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>题号</th><th>标题</th><th>难度</th><th>标签</th>
+            <th>描述</th><th>我的代码</th><th>日期</th><th>耗时</th><th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in problems %}
+        <tr>
+            <td>{{ p.num }}</td>
+            <td>{{ p.title }}</td>
+            <td><span class="badge bg-{{ 'success' if p.difficulty=='Easy' else 'warning' if p.difficulty=='Medium' else 'danger' }}">{{ p.difficulty }}</span></td>
+            <td>{{ p.tags or '-' }}</td>
+            <td>{{ p.description[:50] + '...' if p.description else '-' }}</td>
+            <td>{% if p.code %}<span class="badge bg-info">已记录</span>{% else %}-{% endif %}</td>
+            <td>{{ p.date }}</td>
+            <td>{{ p.time_spent }}分钟</td>
+            <td>
+                <a href=" " class="btn btn-sm btn-outline-primary">编辑</a >
+                <a href="/delete/{{ p.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定删除这条记录？')">删除</a >
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
