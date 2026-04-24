@@ -74,20 +74,26 @@ def add():
 @app.route('/edit/<int:pid>', methods=['GET', 'POST'])
 def edit(pid):
     problem = Problem.query.get_or_404(pid)
+    
     if request.method == 'POST':
+        # 直接修改对象属性
         problem.title = request.form['title']
         problem.difficulty = request.form['difficulty']
         problem.tags = request.form['tags']
         problem.description = request.form.get('description', '')
         problem.code = request.form.get('code', '')
         problem.time_spent = int(request.form['time_spent'])
-        db.session.commit()
+        # 注意：date 通常不修改，如果需要修改可以加上
+        
+        db.session.commit()   # 确保提交
         flash('✅ 修改成功！', 'success')
         return redirect(url_for('index'))
-
-    return render_template('add.html', today=problem.date.strftime('%Y-%m-%d'), problem=problem, edit=True)
-
-
+    
+    # GET 请求：显示编辑表单（预填充数据）
+    return render_template('add.html', 
+                         today=problem.date.strftime('%Y-%m-%d'), 
+                         problem=problem, 
+                         edit=True)
 @app.route('/delete/<int:pid>')
 def delete(pid):
     problem = Problem.query.get_or_404(pid)
